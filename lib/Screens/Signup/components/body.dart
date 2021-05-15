@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/Login/login_screen.dart';
 import 'package:go_event_vendor/Screens/Signup/components/background.dart';
-import 'package:go_event_vendor/Screens/Signup/components/or_divider.dart';
-import 'package:go_event_vendor/Screens/Signup/components/social_icon.dart';
 import 'package:go_event_vendor/components/already_have_an_account_acheck.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/rounded_password_field.dart';
-import 'package:flutter_svg/svg.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -23,13 +20,31 @@ class Body extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/signup.svg",
-              height: size.height * 0.35,
+            RoundedInputField(
+              hintText: "Email",
+              onChanged: (value) {},
             ),
             RoundedInputField(
-              hintText: "Your Email",
+              hintText: "Phone Number",
               onChanged: (value) {},
+              icon: Icons.phone,
+            ),
+            RoundedInputField(
+              hintText: "Service Area",
+              onChanged: (value) {},
+              icon: Icons.location_city,
+            ),
+            RoundedInputField(
+              hintText: "Address",
+              onChanged: (value) {},
+              maxLines: 2,
+              icon: Icons.home,
+            ),
+            RoundedInputField(
+              hintText: "Description",
+              onChanged: (value) {},
+              maxLines: 4,
+              icon: Icons.description,
             ),
             RoundedPasswordField(
               onChanged: (value) {},
@@ -52,24 +67,6 @@ class Body extends StatelessWidget {
                 );
               },
             ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )
           ],
         ),
       ),

@@ -5,11 +5,14 @@ import 'package:go_event_vendor/constant.dart';
 class RoundedInputField extends StatelessWidget {
   final String hintText;
   final IconData icon;
+  final int maxLines;
   final ValueChanged<String> onChanged;
+
   const RoundedInputField({
     Key key,
     this.hintText,
     this.icon = Icons.person,
+    this.maxLines = 1,
     this.onChanged,
   }) : super(key: key);
 
@@ -17,6 +20,8 @@ class RoundedInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        textAlignVertical: TextAlignVertical.center,
+        maxLines: maxLines,
         onChanged: onChanged,
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
