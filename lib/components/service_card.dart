@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/models/Service.dart';
+import 'package:go_event_vendor/size_config.dart';
 import '../constant.dart';
 
 class ServiceCard extends StatelessWidget {
@@ -15,68 +16,78 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    SizeConfig().init(context);
     return Padding(
-      padding: EdgeInsets.only(left: 0.05 * size.width),
+      padding: EdgeInsets.only(left: getProportionateScreenWidth(5)),
       child: SizedBox(
-        width: width / 375 * size.width,
+        width: getProportionateScreenWidth(width),
         child: GestureDetector(
           onTap: () => {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AspectRatio(
-                aspectRatio: 1.3,
-                child: Container(
-                  padding: EdgeInsets.all(0.05 * size.width),
-                  decoration: BoxDecoration(
-                    color: kPrimaryLightColor,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Hero(
-                    tag: service.id.toString(),
-                    child: Image.asset(
-                      service.images[0],
-                      fit: BoxFit.fill,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(10)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: AspectRatio(
+                    aspectRatio: 1.1,
+                    child: Container(
+                      decoration: BoxDecoration(color: kPrimaryLightColor),
+                      child: Hero(
+                        tag: service.id.toString(),
+                        child: Image.asset(
+                          service.images[0],
+                          fit: BoxFit.fill,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                service.name,
-                style: TextStyle(color: Colors.black),
-                maxLines: 2,
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Rp.${service.price}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 0.04 * size.width,
-                      fontWeight: FontWeight.w400,
-                      color: kPrimaryColor,
+                SizedBox(
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(top: getProportionateScreenHeight(5)),
+                    child: Text(
+                      service.name,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: getProportionateScreenWidth(12)),
+                      maxLines: 2,
                     ),
                   ),
-                  Row(
-                    children: [
-                      Icon(Icons.star),
-                      Text(
-                        "${service.rating}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 0.03 * size.width,
-                          color: Colors.black,
-                        ),
+                  height: getProportionateScreenHeight(35),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Rp.${service.price}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: getProportionateScreenWidth(10),
+                        fontWeight: FontWeight.w400,
+                        color: kPrimaryColor,
                       ),
-                    ],
-                  ),
-                ],
-              )
-            ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.star),
+                        Text(
+                          "${service.rating}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: getProportionateScreenWidth(10),
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

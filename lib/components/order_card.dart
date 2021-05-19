@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/models/Order.dart';
 import '../constant.dart';
+import '../size_config.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({
@@ -15,74 +16,100 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    SizeConfig().init(context);
     return Padding(
-      padding: EdgeInsets.only(left: 0.05 * size.width),
+      padding: EdgeInsets.only(left: getProportionateScreenWidth(5)),
       child: SizedBox(
-        width: width / 375 * size.width,
+        width: getProportionateScreenWidth(width),
         child: GestureDetector(
           onTap: () => {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AspectRatio(
-                aspectRatio: 1.3,
-                child: Container(
-                    padding: EdgeInsets.all(0.05 * size.width),
-                    decoration: BoxDecoration(
-                      color: kPrimaryLightColor,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(children: [
-                      Text(
-                        order.eventName,
-                        style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: 0.04 * size.width,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(10)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  child: AspectRatio(
+                    aspectRatio: 1.1,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: kPrimaryLightColor,
                         ),
+                        child: Padding(
+                          padding:
+                              EdgeInsets.all(getProportionateScreenWidth(8)),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  order.eventName,
+                                  style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: getProportionateScreenWidth(16),
+                                  ),
+                                  maxLines: 2,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: getProportionateScreenHeight(5)),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.person,
+                                          size:
+                                              getProportionateScreenWidth(10)),
+                                      Text(
+                                        order.customerName,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize:
+                                              getProportionateScreenWidth(10),
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: getProportionateScreenHeight(5)),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.calendar_today,
+                                          size:
+                                              getProportionateScreenWidth(10)),
+                                      Text(
+                                        order.date,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize:
+                                              getProportionateScreenWidth(10),
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ]),
+                        )),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: getProportionateScreenWidth(2)),
+                  child: SizedBox(
+                      child: Text(
+                        order.status,
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w300),
                         maxLines: 2,
                       ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Icon(Icons.person, size: 0.03 * size.width),
-                          Text(
-                            order.customerName,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 0.025 * size.width,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          Icon(Icons.calendar_today, size: 0.03 * size.width),
-                          Text(
-                            order.date,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 0.025 * size.width,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ])),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: EdgeInsets.only(left: 0.02 * size.width),
-                child: Text(
-                  order.status,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w300),
-                  maxLines: 2,
+                      height: getProportionateScreenHeight(30)),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

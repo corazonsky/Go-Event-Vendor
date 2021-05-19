@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_event_vendor/Screens/Home/home_screen.dart';
 import 'package:go_event_vendor/Screens/Login/components/background.dart';
 import 'package:go_event_vendor/Screens/Signup/signup_screen.dart';
 import 'package:go_event_vendor/components/already_have_an_account_acheck.dart';
@@ -6,6 +7,7 @@ import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_event_vendor/size_config.dart';
 
 class Body extends StatelessWidget {
   const Body({
@@ -14,7 +16,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    SizeConfig().init(context);
     return Background(
       child: SingleChildScrollView(
         child: Column(
@@ -24,12 +26,15 @@ class Body extends StatelessWidget {
               "LOGIN",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/login.svg",
-              height: size.height * 0.35,
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(60),
+              ),
+              child: SvgPicture.asset(
+                "assets/icons/login.svg",
+                height: getProportionateScreenHeight(300),
+              ),
             ),
-            SizedBox(height: size.height * 0.03),
             RoundedInputField(
               hintText: "Your Email",
               onChanged: (value) {},
@@ -39,20 +44,32 @@ class Body extends StatelessWidget {
             ),
             RoundedButton(
               text: "LOGIN",
-              press: () {},
-            ),
-            SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
               press: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return SignUpScreen();
+                      return HomeScreen();
                     },
                   ),
                 );
               },
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: getProportionateScreenHeight(20)),
+              child: AlreadyHaveAnAccountCheck(
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return SignUpScreen();
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

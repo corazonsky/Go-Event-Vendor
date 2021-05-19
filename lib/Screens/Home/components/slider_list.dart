@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/Home/components/section_title.dart';
+import 'package:go_event_vendor/Screens/Service/service_screen.dart';
 import 'package:go_event_vendor/components/order_card.dart';
 import 'package:go_event_vendor/components/service_card.dart';
 import 'package:go_event_vendor/models/Service.dart';
@@ -21,7 +22,19 @@ class SliderList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 0.05 * size.width),
-          child: SectionTitle(title: title, press: () {}),
+          child: SectionTitle(
+              title: title,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      if (type == "service") return ServiceScreen();
+                      return ServiceScreen();
+                    },
+                  ),
+                );
+              }),
         ),
         SizedBox(height: 0.05 * size.width),
         SingleChildScrollView(

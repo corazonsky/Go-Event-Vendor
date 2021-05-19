@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Order {
   final String customerName, status, orderNumber, eventName;
   final String date;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_event_vendor/size_config.dart';
 
 class MainBackground extends StatelessWidget {
   final Widget child;
@@ -9,9 +10,9 @@ class MainBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    SizeConfig().init(context);
     return Container(
-      height: size.height,
+      height: getProportionateScreenHeight(SizeConfig.screenHeight),
       width: double.infinity,
       // Here i can use size.width but use double.infinity because both work as a same
       child: Stack(
@@ -22,7 +23,7 @@ class MainBackground extends StatelessWidget {
             left: 0,
             child: Image.asset(
               "assets/images/signup_top.png",
-              width: size.width * 0.35,
+              width: getProportionateScreenWidth(70),
             ),
           ),
           Positioned(
@@ -30,7 +31,7 @@ class MainBackground extends StatelessWidget {
             left: 0,
             child: Image.asset(
               "assets/images/main_bottom.png",
-              width: size.width * 0.25,
+              width: getProportionateScreenWidth(50),
             ),
           ),
           child,

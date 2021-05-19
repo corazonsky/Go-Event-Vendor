@@ -5,12 +5,12 @@ import 'package:go_event_vendor/Screens/Signup/signup_screen.dart';
 import 'package:go_event_vendor/Screens/Welcome/components/background.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/constant.dart';
+import 'package:go_event_vendor/size_config.dart';
 
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    //total height and width of our screen
+    SizeConfig().init(context);
     return Background(
       child: SingleChildScrollView(
         child: Column(
@@ -20,10 +20,12 @@ class Body extends StatelessWidget {
               "WELCOME GO-EVENT VENDORS",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: size.height * 0.05),
-            SvgPicture.asset("assets/icons/chat.svg",
-                height: size.height * 0.45),
-            SizedBox(height: size.height * 0.05),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: getProportionateScreenHeight(80)),
+              child: SvgPicture.asset("assets/icons/chat.svg",
+                  height: getProportionateScreenHeight(350)),
+            ),
             RoundedButton(
               text: "LOGIN",
               press: () {

@@ -3,10 +3,12 @@ import 'package:go_event_vendor/components/text_field_container.dart';
 import 'package:go_event_vendor/constant.dart';
 
 class RoundedPasswordField extends StatelessWidget {
+  final double width;
   final ValueChanged<String> onChanged;
   const RoundedPasswordField({
     Key key,
     this.onChanged,
+    this.width = 270,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class RoundedPasswordField extends StatelessWidget {
           border: InputBorder.none,
         ),
       ),
+      width: width,
     );
   }
 }
