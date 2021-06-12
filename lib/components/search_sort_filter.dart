@@ -15,7 +15,6 @@ class SearchSortFilter extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         RoundedInputField(
-          width: 220,
           icon: Icons.search,
           hintText: "Search",
         ),

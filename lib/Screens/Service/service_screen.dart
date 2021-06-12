@@ -8,7 +8,11 @@ class ServiceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final int selectedIndex = 1;
     return Scaffold(
-      //appBar: CustomAppBar(),
+      appBar: CustomAppBar(
+        title: "Service Offered",
+        searchBar: true,
+        backButton: true,
+      ),
       body: Body(),
       bottomNavigationBar:
           CustomBottomNavigationBar(currentIndex: selectedIndex),

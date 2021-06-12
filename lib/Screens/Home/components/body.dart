@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/Home/components/slider_list.dart';
 import 'package:go_event_vendor/components/main_background.dart';
 
-import 'home_header.dart';
-
 class Body extends StatelessWidget {
   const Body({
     Key key,
@@ -16,7 +14,6 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            HomeHeader(),
             SliderList(title: "Your Services", type: "service"),
             SizedBox(height: 25),
             SliderList(title: "Your Orders", type: "order")
