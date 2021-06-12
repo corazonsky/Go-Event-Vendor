@@ -7,6 +7,7 @@ import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/size_config.dart';
 
 class Body extends StatelessWidget {
@@ -45,14 +46,7 @@ class Body extends StatelessWidget {
             RoundedButton(
               text: "LOGIN",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return HomeScreen();
-                    },
-                  ),
-                );
+                Navigator.of(context).pushNamed(Routes.home);
               },
             ),
             Padding(
@@ -60,14 +54,7 @@ class Body extends StatelessWidget {
                   vertical: getProportionateScreenHeight(20)),
               child: AlreadyHaveAnAccountCheck(
                 press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SignUpScreen();
-                      },
-                    ),
-                  );
+                  Navigator.of(context).pushNamed(Routes.signup);
                 },
               ),
             ),

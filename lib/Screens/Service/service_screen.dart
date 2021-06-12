@@ -14,8 +14,9 @@ class ServiceScreen extends StatelessWidget {
         backButton: true,
       ),
       body: Body(),
-      bottomNavigationBar:
-          CustomBottomNavigationBar(currentIndex: selectedIndex),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: selectedIndex,
+      ),
     );
   }
 }

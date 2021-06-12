@@ -5,6 +5,7 @@ import 'package:go_event_vendor/components/already_have_an_account_acheck.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/rounded_password_field.dart';
+import 'package:go_event_vendor/routes.dart';
 import '../../../size_config.dart';
 
 class Body extends StatelessWidget {
@@ -65,14 +66,7 @@ class Body extends StatelessWidget {
             AlreadyHaveAnAccountCheck(
               login: false,
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginScreen();
-                    },
-                  ),
-                );
+                Navigator.of(context).pushNamed(Routes.login);
               },
             ),
           ],

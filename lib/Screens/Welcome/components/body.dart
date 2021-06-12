@@ -5,6 +5,7 @@ import 'package:go_event_vendor/Screens/Signup/signup_screen.dart';
 import 'package:go_event_vendor/Screens/Welcome/components/background.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/constant.dart';
+import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/size_config.dart';
 
 class Body extends StatelessWidget {
@@ -29,23 +30,13 @@ class Body extends StatelessWidget {
             RoundedButton(
               text: "LOGIN",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return LoginScreen();
-                  }),
-                );
+                Navigator.of(context).pushNamed(Routes.login);
               },
             ),
             RoundedButton(
               text: "REGISTER",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return SignUpScreen();
-                  }),
-                );
+                Navigator.of(context).pushNamed(Routes.signup);
               },
               color: kPrimaryLightColor,
               textColor: Colors.black,

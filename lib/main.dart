@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/Home/home_screen.dart';
 import 'package:go_event_vendor/Screens/Welcome/welcome_screen.dart';
 import 'package:go_event_vendor/constant.dart';
+import 'package:go_event_vendor/routes.dart';
 import 'Screens/Service/service_screen.dart';
 
 void main() {
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primaryColor: kPrimaryColor, scaffoldBackgroundColor: Colors.white),
       home: WelcomeScreen(),
+      routes: Routes.routes,
     );
   }
 }

@@ -12,8 +12,9 @@ class HomeScreen extends StatelessWidget {
         title: "Vendor Home",
       ),
       body: Body(),
-      bottomNavigationBar:
-          CustomBottomNavigationBar(currentIndex: selectedIndex),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: selectedIndex,
+      ),
     );
   }
 }
