@@ -7,14 +7,14 @@ import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_event_vendor/providers/auth_provider.dart';
 import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/size_config.dart';
+import 'package:provider/provider.dart';
 
 class Body extends StatelessWidget {
-  const Body({
-    Key key,
-  }) : super(key: key);
-
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -37,16 +37,15 @@ class Body extends StatelessWidget {
               ),
             ),
             RoundedInputField(
-              hintText: "Your Email",
-              onChanged: (value) {},
-            ),
-            RoundedPasswordField(
-              onChanged: (value) {},
-            ),
+                hintText: "Your Email", controller: _emailController),
+            RoundedPasswordField(controller: _passwordController),
             RoundedButton(
               text: "LOGIN",
               press: () {
-                Navigator.of(context).pushNamed(Routes.home);
+                context.read<AuthProvider>().logIn(
+                      email: _emailController.text.trim(),
+                      password: _passwordController.text.trim(),
+                    );
               },
             ),
             Padding(

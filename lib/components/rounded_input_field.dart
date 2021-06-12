@@ -7,14 +7,14 @@ class RoundedInputField extends StatelessWidget {
   final IconData icon;
   final int maxLines;
   final double width;
-  final ValueChanged<String> onChanged;
+  final TextEditingController controller;
 
   const RoundedInputField({
     Key key,
     this.hintText,
     this.icon = Icons.person,
     this.maxLines = 1,
-    this.onChanged,
+    this.controller,
     this.width = 270,
   }) : super(key: key);
 
@@ -24,7 +24,7 @@ class RoundedInputField extends StatelessWidget {
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
         maxLines: maxLines,
-        onChanged: onChanged,
+        controller: controller,
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
           icon: Icon(
