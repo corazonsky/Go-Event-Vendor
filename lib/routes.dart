@@ -22,7 +22,5 @@ class Routes {
     signup: (BuildContext context) => SignUpScreen(),
     home: (BuildContext context) => HomeScreen(),
     service: (BuildContext context) => ServiceScreen(),
-    //service_details: (BuildContext context) => CreateEditTodoScreen(),
-    //create_service: (BuildContext context) => CreateEditTodoScreen(),
   };
 }

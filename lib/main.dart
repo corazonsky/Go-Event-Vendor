@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/Home/home_screen.dart';
 import 'package:go_event_vendor/Screens/Welcome/welcome_screen.dart';
 import 'package:go_event_vendor/constant.dart';
+import 'package:go_event_vendor/models/User.dart';
 import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
 import 'package:go_event_vendor/services/firebase_storage_service.dart';

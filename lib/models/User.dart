@@ -1,9 +1,9 @@
-class UserModel {
-  String uid;
-  String email;
+import 'package:flutter/material.dart';
 
-  UserModel({
-    this.uid,
-    this.email,
-  });
+@immutable
+class UserModel {
+  final String uid;
+  final String email;
+
+  UserModel({@required this.uid, this.email});
 }

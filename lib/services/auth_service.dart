@@ -1,11 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-
-@immutable
-class UserModel {
-  const UserModel({@required this.uid});
-  final String uid;
-}
+import 'package:go_event_vendor/models/User.dart';
 
 class FirebaseAuthService {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -16,6 +10,21 @@ class FirebaseAuthService {
 
   Stream<UserModel> get onAuthStateChanged {
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
+  }
+
+  User getCurrentUser() {
+    try {
+      final user = _firebaseAuth.currentUser;
+      User loggedInUser;
+      if (user != null) {
+        loggedInUser = user;
+        return loggedInUser;
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future<UserModel> registerWithEmailAndPassword(

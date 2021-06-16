@@ -62,7 +62,7 @@ class Body extends StatelessWidget {
 
 Future<void> signIn(BuildContext context, String email, String password) async {
   try {
-    final auth = Provider.of<FirebaseAuthService>(context);
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
     await auth.signInWithEmailAndPassword(email, password);
   } catch (e) {
     print(e);

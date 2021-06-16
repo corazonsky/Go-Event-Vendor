@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/search_sort_filter.dart';
+import 'package:go_event_vendor/models/UserData.dart';
+import 'package:go_event_vendor/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 import '../constant.dart';
 import '../size_config.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final Widget title;
   final bool searchBar;
   final bool backButton;
   const CustomAppBar({
@@ -27,10 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       elevation: 0,
       centerTitle: true,
-      title: Text(
-        title,
-        style: TextStyle(color: kPrimaryLightColor),
-      ),
+      title: title,
       leading: backButton
           ? IconButton(
               icon: Icon(Icons.arrow_back),
@@ -40,6 +39,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
             )
           : Container(),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.logout),
+          color: kPrimaryLightColor,
+          onPressed: () {
+            signOut(context);
+          },
+        ),
+      ],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(0),
         child: searchBar
@@ -50,5 +58,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             : Container(),
       ),
     );
+  }
+}
+
+Future<void> signOut(BuildContext context) async {
+  try {
+    final auth = Provider.of<FirebaseAuthService>(context, listen: false);
+    await auth.signOut();
+  } catch (e) {
+    print(e);
   }
 }
