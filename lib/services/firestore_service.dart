@@ -13,7 +13,7 @@ class FirestoreService {
   Future<void> setUserData(UserDataModel userData) async {
     final path = FirestorePath.userData(uid);
     final reference = FirebaseFirestore.instance.doc(path);
-    await reference.set(userData.toMap());
+    await reference.set(userData.toMap(), SetOptions(merge: true));
   }
 
   // Reads the current userData
