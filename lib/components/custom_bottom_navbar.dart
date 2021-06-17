@@ -34,7 +34,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             IconWithText(
                 text: "Profile",
                 icon: Icons.person,
-                routes: Routes.home,
+                routes: Routes.profile,
                 isCurrent: currentIndex == 3),
           ],
         ));

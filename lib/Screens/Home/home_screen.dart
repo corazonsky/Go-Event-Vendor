@@ -1,14 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/Home/components/body.dart';
 import 'package:go_event_vendor/components/custom_app_bar.dart';
 import 'package:go_event_vendor/components/custom_bottom_navbar.dart';
 import 'package:go_event_vendor/models/UserData.dart';
-import 'package:go_event_vendor/services/auth_service.dart';
 import 'package:go_event_vendor/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 
-import '../../constant.dart';
 import '../../size_config.dart';
 
 class HomeScreen extends StatelessWidget {
