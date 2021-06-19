@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/components/main_background.dart';
+import 'package:go_event_vendor/components/profile_pic.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
-import 'package:go_event_vendor/constant.dart';
 import 'package:go_event_vendor/models/UserData.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
 import 'package:go_event_vendor/services/firebase_storage_service.dart';
@@ -59,111 +59,47 @@ class _BodyState extends State<Body> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                height: 115,
-                width: 115,
-                child: Stack(
-                  fit: StackFit.expand,
-                  clipBehavior: Clip.none,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: imageFile == null
-                          ? (imageURL == "" ? null : NetworkImage(imageURL))
-                          : FileImage(imageFile),
-                    ),
-                    Positioned(
-                      left: -16,
-                      bottom: 0,
-                      child: SizedBox(
-                        height: 46,
-                        width: 46,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: BorderSide(color: Colors.white),
-                              ),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFFF5F6F9)),
-                          ),
-                          onPressed: () async {
-                            imageFile = null;
-                            setState(() {});
-                          },
-                          child: Icon(
-                            Icons.refresh,
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: -16,
-                      bottom: 0,
-                      child: SizedBox(
-                        height: 46,
-                        width: 46,
-                        child: TextButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: BorderSide(color: Colors.white),
-                              ),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFFF5F6F9)),
-                          ),
-                          onPressed: () async {
-                            final imagePicker = Provider.of<ImagePickerService>(
-                                context,
-                                listen: false);
-                            imageFile = await imagePicker.pickImage(
-                                source: ImageSource.gallery);
-                            setState(() {});
-                          },
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+            ProfilePic(
+              imageFile: imageFile,
+              imageURL: imageURL,
+              resetImage: () async {
+                imageFile = null;
+                setState(() {});
+              },
+              pickImage: () async {
+                final imagePicker =
+                    Provider.of<ImagePickerService>(context, listen: false);
+                File imagePicked =
+                    await imagePicker.pickImage(source: ImageSource.gallery);
+                if (imagePicked != null) imageFile = imagePicked;
+                setState(() {});
+              },
             ),
             buildName(user, widget.userData),
             SizedBox(height: 25),
-            InputFieldWithTitle(
+            RoundedInputField(
               title: "Display Name",
               icon: Icons.person,
               controller: _nameController,
             ),
-            InputFieldWithTitle(
+            RoundedInputField(
               title: "Phone Number",
               icon: Icons.phone_android,
               controller: _phoneNumberController,
             ),
-            InputFieldWithTitle(
+            RoundedInputField(
               title: "Address",
               icon: Icons.home,
               controller: _addressController,
             ),
-            InputFieldWithTitle(
+            RoundedInputField(
               title: "City",
               icon: Icons.location_city,
               controller: _cityController,
             ),
-            InputFieldWithTitle(
+            RoundedInputField(
               title: "Description",
-              maxlines: 4,
+              maxLines: 4,
               icon: Icons.description,
               controller: _descriptionController,
             ),
@@ -186,39 +122,6 @@ class _BodyState extends State<Body> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class InputFieldWithTitle extends StatelessWidget {
-  const InputFieldWithTitle(
-      {Key key,
-      @required this.title,
-      @required this.controller,
-      this.maxlines,
-      this.icon})
-      : super(key: key);
-
-  final String title;
-  final TextEditingController controller;
-  final int maxlines;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Text(title),
-        ),
-        RoundedInputField(
-          maxLines: maxlines,
-          icon: icon,
-          controller: controller,
-        ),
-      ],
     );
   }
 }

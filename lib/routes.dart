@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_event_vendor/Screens/CreateService/create_service.dart';
 import 'package:go_event_vendor/Screens/Home/home_screen.dart';
 import 'package:go_event_vendor/Screens/Login/login_screen.dart';
 import 'package:go_event_vendor/Screens/Profile/profile_screen.dart';
 import 'package:go_event_vendor/Screens/Service/service_screen.dart';
+import 'package:go_event_vendor/Screens/ServiceDetails/service_details.dart';
 import 'package:go_event_vendor/Screens/Signup/signup_screen.dart';
 import 'package:go_event_vendor/Screens/Welcome/welcome_screen.dart';
 
@@ -15,7 +17,7 @@ class Routes {
   static const String home = '/home';
   static const String service = '/service';
   static const String service_details = '/service_details';
-  static const String create_service = '/create_service';
+  static const String create_service = '/service/create';
   static const String profile = '/profile';
 
   static final routes = <String, WidgetBuilder>{
@@ -24,6 +26,8 @@ class Routes {
     signup: (BuildContext context) => SignUpScreen(),
     home: (BuildContext context) => HomeScreen(),
     service: (BuildContext context) => ServiceScreen(),
+    create_service: (BuildContext context) => CreateServiceScreen(),
+    service_details: (BuildContext context) => ServiceDetailsScreen(),
     profile: (BuildContext context) => ProfileScreen(),
   };
 }

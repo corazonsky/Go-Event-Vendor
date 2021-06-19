@@ -1,100 +1,151 @@
-import 'package:flutter/material.dart';
-
 class Service {
-  final String name, description, status;
+  final String serviceId, vendorId, serviceType, serviceName, description;
   final List<String> images;
-  final int price, size, id;
+  final int price, area, capacity, minOrder, maxOrder;
   final double rating;
-  final Color color;
+  final bool status;
+
   Service(
-      {this.id,
+      {this.serviceId,
+      this.vendorId,
       this.images,
-      this.name,
-      this.price,
+      this.serviceType,
+      this.serviceName,
       this.description,
+      this.price,
+      this.minOrder,
+      this.maxOrder,
+      this.area,
+      this.capacity,
       this.status,
-      this.size,
-      this.color,
       this.rating});
+
+  factory Service.fromMap(Map<String, dynamic> data, String documentId) {
+    if (data == null) {
+      return null;
+    }
+    String serviceId = documentId;
+    String vendorId = data['vendorId'];
+    String serviceType = data['serviceType'];
+    String serviceName = data['serviceName'];
+    String description = data['description'];
+    int price = data['price'];
+    int minOrder = data['price'];
+    int maxOrder = data['maxOrder'];
+    int area = data['area'];
+    int capacity = data['capacity'];
+    bool status = data['status'];
+    double rating = data['rating'];
+    List<String> images = data['images'];
+
+    return Service(
+        serviceId: serviceId,
+        vendorId: vendorId,
+        serviceType: serviceType,
+        serviceName: serviceName,
+        description: description,
+        price: price,
+        minOrder: minOrder,
+        maxOrder: maxOrder,
+        area: area,
+        capacity: capacity,
+        status: status,
+        rating: rating,
+        images: images);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'serviceId': serviceId,
+      'vendorId': vendorId,
+      'serviceType': serviceType,
+      'serviceName': serviceName,
+      'description': description,
+      'price': price,
+      'minOrder': minOrder,
+      'maxOrder': maxOrder,
+      'area': area,
+      'capacity': capacity,
+      'status': status,
+      'rating': rating,
+    };
+  }
 }
 
 List<Service> services = [
   Service(
-      id: 1,
-      name: "Kassandra Ballroom - Max. 100 Pax",
-      price: 880000,
-      size: 12,
-      rating: 4.5,
-      description: dummyText,
-      images: ["assets/images/service_1.jpg"],
-      color: Color(0xFF3D82AE)),
-  Service(
-      id: 2,
-      name: "Ballroom Biasa",
-      price: 1790000,
-      size: 8,
-      rating: 4.5,
-      description: dummyText,
-      images: ["assets/images/service_2.jpg"],
-      color: Color(0xFFD3A984)),
-  Service(
-      id: 3,
-      name: "Rameses Ballroom - Max. 1000 Pax",
-      price: 2690000,
-      size: 10,
-      rating: 4.5,
-      description: dummyText,
-      images: ["assets/images/image_banner.png"],
-      color: Color(0xFF989493)),
-  Service(
-      id: 4,
-      name: "Rameses Ballroom - Max. 1000 Pax",
-      price: 2690000,
-      size: 11,
-      rating: 4.5,
-      description: dummyText,
-      images: ["assets/images/service_1.jpg"],
-      color: Color(0xFFE6B398)),
-  Service(
-      id: 5,
-      name: "Rameses Ballroom - Max. 1000 Pax",
-      price: 2690000,
-      size: 12,
-      rating: 4.5,
-      description: dummyText,
-      images: ["assets/images/service_2.jpg"],
-      color: Color(0xFFFB7883)),
-  Service(
-    id: 6,
-    name: "Rameses Ballroom - Max. 1000 Pax",
-    price: 2690000,
-    size: 12,
+    serviceId: "1",
+    serviceName: "Kassandra Ballroom - Max. 100 Pax",
+    price: 880000,
+    area: 12,
     rating: 4.5,
     description: dummyText,
-    images: ["assets/images/image_banner.png"],
-    color: Color(0xFFAEAEAE),
+    images: ["assets/images/service_1.jpg"],
   ),
   Service(
-    id: 7,
-    name: "Rameses Ballroom - Max. 1000 Pax",
-    price: 2690000,
-    size: 12,
+    serviceId: "2",
+    serviceName: "Ballroom Biasa",
+    price: 1790000,
+    area: 8,
     rating: 4.5,
     description: dummyText,
-    images: ["assets/images/image_banner.png"],
-    color: Color(0xFFAEAEAE),
+    images: ["assets/images/service_2.jpg"],
   ),
   Service(
-    id: 8,
-    name: "Rameses Ballroom - Max. 1000 Pax",
+    serviceId: "3",
+    serviceName: "Rameses Ballroom - Max. 1000 Pax",
     price: 2690000,
-    size: 12,
+    area: 10,
     rating: 4.5,
     description: dummyText,
     images: ["assets/images/image_banner.png"],
-    color: Color(0xFFAEAEAE),
+  ),
+  Service(
+    serviceId: "4",
+    serviceName: "Rameses Ballroom - Max. 1000 Pax",
+    price: 2690000,
+    area: 11,
+    rating: 4.5,
+    description: dummyText,
+    images: ["assets/images/service_1.jpg"],
+  ),
+  Service(
+    serviceId: "5",
+    serviceName: "Rameses Ballroom - Max. 1000 Pax",
+    price: 2690000,
+    area: 12,
+    rating: 4.5,
+    description: dummyText,
+    images: ["assets/images/service_2.jpg"],
+  ),
+  Service(
+    serviceId: "6",
+    serviceName: "Rameses Ballroom - Max. 1000 Pax",
+    price: 2690000,
+    area: 12,
+    rating: 4.5,
+    description: dummyText,
+    images: ["assets/images/image_banner.png"],
+  ),
+  Service(
+    serviceId: "7",
+    serviceName: "Rameses Ballroom - Max. 1000 Pax",
+    price: 2690000,
+    area: 12,
+    rating: 4.5,
+    description: dummyText,
+    images: ["assets/images/image_banner.png"],
+  ),
+  Service(
+    serviceId: "8",
+    serviceName: "Rameses Ballroom - Max. 1000 Pax",
+    price: 2690000,
+    area: 12,
+    rating: 4.5,
+    description: dummyText,
+    images: ["assets/images/image_banner.png"],
   ),
 ];
 
 String dummyText =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. When an unknown printer took a galley.";
+    "Lorem Ipsum is simply dummy text of the printing and serviceTypesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. When an unknown printer took a galley.";

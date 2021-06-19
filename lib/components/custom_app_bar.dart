@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_event_vendor/components/search_sort_filter.dart';
-import 'package:go_event_vendor/models/UserData.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -11,14 +9,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final bool searchBar;
   final bool backButton;
-  const CustomAppBar({
-    this.title,
-    this.searchBar = false,
-    this.backButton = false,
-  });
+  final Widget bottom;
+  const CustomAppBar(
+      {this.title,
+      this.searchBar = false,
+      this.backButton = false,
+      this.bottom});
 
   @override
-  Size get preferredSize => Size.fromHeight(searchBar
+  Size get preferredSize => Size.fromHeight(bottom != null
       ? getProportionateScreenHeight(140)
       : getProportionateScreenHeight(70));
   @override
@@ -48,15 +47,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
       ],
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(0),
-        child: searchBar
-            ? Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: SearchSortFilter(),
-              )
-            : Container(),
-      ),
+      bottom: bottom,
     );
   }
 }

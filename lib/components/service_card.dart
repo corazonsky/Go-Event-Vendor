@@ -36,7 +36,7 @@ class ServiceCard extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(color: kPrimaryLightColor),
                       child: Hero(
-                        tag: service.id.toString(),
+                        tag: service.serviceName,
                         child: Image.asset(
                           service.images[0],
                           fit: BoxFit.fill,
@@ -50,7 +50,7 @@ class ServiceCard extends StatelessWidget {
                     padding:
                         EdgeInsets.only(top: getProportionateScreenHeight(5)),
                     child: Text(
-                      service.name,
+                      service.serviceName,
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: getProportionateScreenWidth(12)),

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/Signup/components/background.dart';
 import 'package:go_event_vendor/components/already_have_an_account_acheck.dart';
+import 'package:go_event_vendor/components/profile_pic.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/rounded_password_field.dart';
-import 'package:go_event_vendor/constant.dart';
 import 'package:go_event_vendor/models/UserData.dart';
 import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
@@ -50,33 +50,19 @@ class _BodyState extends State<Body> {
               ),
               child: Column(
                 children: [
-                  (imageFile != null)
-                      ? Container(
-                          width: getProportionateScreenWidth(120),
-                          height: getProportionateScreenWidth(120),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: kPrimaryColor),
-                              image: DecorationImage(
-                                  image: FileImage(imageFile),
-                                  fit: BoxFit.cover)),
-                        )
-                      : Container(
-                          width: getProportionateScreenWidth(120),
-                          height: getProportionateScreenWidth(120),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: kPrimaryColor),
-                          ),
-                        ),
-                  RoundedButton(
-                    text: "+ Profile Picture",
-                    press: () async {
+                  ProfilePic(
+                    imageFile: imageFile,
+                    resetImage: () async {
+                      imageFile = null;
+                      setState(() {});
+                    },
+                    pickImage: () async {
                       final imagePicker = Provider.of<ImagePickerService>(
                           context,
                           listen: false);
-                      imageFile = await imagePicker.pickImage(
+                      File imagePicked = await imagePicker.pickImage(
                           source: ImageSource.gallery);
+                      if (imagePicked != null) imageFile = imagePicked;
                       setState(() {});
                     },
                   ),
