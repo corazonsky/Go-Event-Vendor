@@ -49,7 +49,11 @@ class SliderList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ...List.generate(
-                        serviceList.length > 5 ? 5 : serviceList.length,
+                        type == "service"
+                            ? serviceList.length > 5
+                                ? 5
+                                : serviceList.length
+                            : 5,
                         (index) {
                           return Padding(
                             padding: EdgeInsets.all(3),

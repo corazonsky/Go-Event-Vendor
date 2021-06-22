@@ -80,26 +80,31 @@ class _BodyState extends State<Body> {
             SizedBox(height: 25),
             RoundedInputField(
               title: "Display Name",
+              hintText: "Display Name",
               icon: Icons.person,
               controller: _nameController,
             ),
             RoundedInputField(
               title: "Phone Number",
+              hintText: "Phone Number",
               icon: Icons.phone_android,
               controller: _phoneNumberController,
             ),
             RoundedInputField(
               title: "Address",
+              hintText: "Address",
               icon: Icons.home,
               controller: _addressController,
             ),
             RoundedInputField(
               title: "City",
+              hintText: "City",
               icon: Icons.location_city,
               controller: _cityController,
             ),
             RoundedInputField(
               title: "Description",
+              hintText: "Description",
               maxLines: 4,
               icon: Icons.description,
               controller: _descriptionController,

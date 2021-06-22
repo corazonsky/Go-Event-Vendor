@@ -32,14 +32,6 @@ class RoundedInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        title != null
-            ? Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(title),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(left: 10),
-              ),
         TextFieldContainer(
           child: TextFormField(
             textAlignVertical: TextAlignVertical.center,
@@ -90,6 +82,7 @@ class RoundedInputField extends StatelessWidget {
               prefixText: prefixText,
               suffixStyle: TextStyle(color: kPrimaryColor),
               suffixText: suffixText,
+              labelText: title,
               hintText: hintText,
             ),
           ),

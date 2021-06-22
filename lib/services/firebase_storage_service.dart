@@ -25,7 +25,7 @@ class FirebaseStorageService {
     for (var file in fileList) {
       pictureURLs.add(await upload(
         file: file,
-        path: FirestorePath.service(uid) + '/${basename(file.path)}',
+        path: FirestorePath.service(uid) + '$serviceId/${basename(file.path)}',
       ));
     }
     return pictureURLs;

@@ -13,7 +13,6 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final int selectedIndex = 3;
     final database = Provider.of<FirestoreService>(context);
-    SizeConfig().init(context);
     return Scaffold(
       appBar: CustomAppBar(title: Text("Vendor Profile"), backButton: true),
       body: StreamBuilder<UserDataModel>(

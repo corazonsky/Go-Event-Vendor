@@ -30,7 +30,7 @@ class Service {
     String serviceName = data['serviceName'];
     String description = data['description'];
     int price = data['price'];
-    int minOrder = data['price'];
+    int minOrder = data['minOrder'];
     int maxOrder = data['maxOrder'];
     int area = data['area'];
     int capacity = data['capacity'];
@@ -69,7 +69,8 @@ class Service {
       'status': status,
       'rating': rating,
       'images': images
-    };
+    }..removeWhere(
+        (dynamic key, dynamic value) => key == null || value == null);
   }
 }
 

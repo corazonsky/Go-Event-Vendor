@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_event_vendor/Screens/ServiceDetails/service_details.dart';
 import 'package:go_event_vendor/models/Service.dart';
+import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/size_config.dart';
 import '../constant.dart';
 
@@ -20,7 +22,10 @@ class ServiceCard extends StatelessWidget {
       child: Container(
         width: getProportionateScreenWidth(width),
         child: GestureDetector(
-          onTap: () => {},
+          onTap: () {
+            Navigator.pushNamed(context, Routes.service_details,
+                arguments: {'serviceId': service.serviceId});
+          },
           child: Column(
             children: [
               ClipRRect(

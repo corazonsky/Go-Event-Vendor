@@ -16,7 +16,7 @@ class MainBackground extends StatelessWidget {
       width: double.infinity,
       // Here i can use size.width but use double.infinity because both work as a same
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: <Widget>[
           Positioned(
             top: 0,
