@@ -5,6 +5,8 @@ import 'package:go_event_vendor/components/order_card.dart';
 import 'package:go_event_vendor/components/service_card.dart';
 import 'package:go_event_vendor/models/Service.dart';
 import 'package:go_event_vendor/models/Order.dart';
+import 'package:go_event_vendor/services/firestore_service.dart';
+import 'package:provider/provider.dart';
 
 class SliderList extends StatelessWidget {
   const SliderList({
@@ -17,11 +19,11 @@ class SliderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final database = Provider.of<FirestoreService>(context);
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0.05 * size.width),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: SectionTitle(
               title: title,
               press: () {
@@ -36,23 +38,37 @@ class SliderList extends StatelessWidget {
                 );
               }),
         ),
-        SizedBox(height: 0.05 * size.width),
         SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              ...List.generate(
-                5,
-                (index) {
-                  if (type == "service")
-                    return ServiceCard(service: services[index]);
-                  return OrderCard(order: orders[index]);
-                },
-              ),
-              SizedBox(width: 0.05 * size.width),
-            ],
-          ),
-        )
+            scrollDirection: Axis.horizontal,
+            child: StreamBuilder(
+              stream: database.servicesStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Service> serviceList = snapshot.data;
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...List.generate(
+                        serviceList.length > 5 ? 5 : serviceList.length,
+                        (index) {
+                          return Padding(
+                            padding: EdgeInsets.all(3),
+                            child: type == "service"
+                                ? ServiceCard(service: serviceList[index])
+                                : OrderCard(order: orders[index]),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Text("No data available");
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ))
       ],
     );
   }

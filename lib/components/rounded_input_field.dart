@@ -49,16 +49,48 @@ class RoundedInputField extends StatelessWidget {
             keyboardType: digitInput ? TextInputType.number : null,
             inputFormatters:
                 digitInput ? [FilteringTextInputFormatter.digitsOnly] : null,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
             decoration: InputDecoration(
-              icon: Icon(
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              prefixIcon: Icon(
                 icon,
                 color: kPrimaryColor,
+              ),
+              fillColor: kPrimaryLightColor,
+              filled: true,
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                  borderSide: BorderSide(
+                    color: kPrimaryLightColor,
+                  )),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(
+                  color: kPrimaryColor,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(
+                  color: kPrimaryColor,
+                ),
               ),
               prefixText: prefixText,
               suffixStyle: TextStyle(color: kPrimaryColor),
               suffixText: suffixText,
               hintText: hintText,
-              border: InputBorder.none,
             ),
           ),
           width: width,

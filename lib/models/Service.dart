@@ -1,6 +1,6 @@
 class Service {
   final String serviceId, vendorId, serviceType, serviceName, description;
-  final List<String> images;
+  final List images;
   final int price, area, capacity, minOrder, maxOrder;
   final double rating;
   final bool status;
@@ -36,7 +36,7 @@ class Service {
     int capacity = data['capacity'];
     bool status = data['status'];
     double rating = data['rating'];
-    List<String> images = data['images'];
+    List images = data['images'];
 
     return Service(
         serviceId: serviceId,
@@ -68,6 +68,7 @@ class Service {
       'capacity': capacity,
       'status': status,
       'rating': rating,
+      'images': images
     };
   }
 }

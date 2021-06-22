@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:path/path.dart';
 import 'firestore_path.dart';
 
 class FirebaseStorageService {
@@ -16,6 +16,20 @@ class FirebaseStorageService {
         file: file,
         path: FirestorePath.userData(uid) + '/profile_picture.png',
       );
+
+  Future<List<String>> uploadServiceImages({
+    @required List<File> fileList,
+    @required String serviceId,
+  }) async {
+    List<String> pictureURLs = [];
+    for (var file in fileList) {
+      pictureURLs.add(await upload(
+        file: file,
+        path: FirestorePath.service(uid) + '/${basename(file.path)}',
+      ));
+    }
+    return pictureURLs;
+  }
 
   /// Generic file upload for any [path]
   Future<String> upload({

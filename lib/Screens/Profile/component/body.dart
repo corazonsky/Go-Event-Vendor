@@ -28,6 +28,7 @@ class _BodyState extends State<Body> {
   final _addressController = TextEditingController();
   final _cityController = TextEditingController();
   final _descriptionController = TextEditingController();
+  String _imageURL;
   File imageFile;
 
   @override
@@ -38,6 +39,7 @@ class _BodyState extends State<Body> {
     _addressController.text = widget.userData.address;
     _cityController.text = widget.userData.city;
     _descriptionController.text = widget.userData.description;
+    _imageURL = widget.userData.photoURL;
   }
 
   @override
@@ -53,7 +55,6 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseAuthService>(context).getCurrentUser();
-    String imageURL = widget.userData.photoURL;
     return MainBackground(
       child: SingleChildScrollView(
         child: Column(
@@ -61,7 +62,7 @@ class _BodyState extends State<Body> {
           children: [
             ProfilePic(
               imageFile: imageFile,
-              imageURL: imageURL,
+              imageURL: _imageURL,
               resetImage: () async {
                 imageFile = null;
                 setState(() {});
@@ -107,15 +108,7 @@ class _BodyState extends State<Body> {
             RoundedButton(
               text: "Save Changes",
               press: () {
-                editUserData(
-                    context,
-                    _nameController.text.trim(),
-                    _phoneNumberController.text.trim(),
-                    _addressController.text.trim(),
-                    _cityController.text.trim(),
-                    _descriptionController.text.trim(),
-                    imageURL,
-                    imageFile);
+                editUserData();
               },
             ),
             SizedBox(height: 25),
@@ -123,6 +116,40 @@ class _BodyState extends State<Body> {
         ),
       ),
     );
+  }
+
+  Future<void> editUserData() async {
+    try {
+      String downloadUrl = "";
+      if (imageFile != null) {
+        //upload image to storage
+        final storage =
+            Provider.of<FirebaseStorageService>(context, listen: false);
+        downloadUrl = await storage.uploadProfilePicture(file: imageFile);
+      }
+      final displayName = _nameController.text.trim();
+      final phoneNumber = _phoneNumberController.text.trim();
+      final address = _addressController.text.trim();
+      final city = _addressController.text.trim();
+      final description = _descriptionController.text.trim();
+
+      //save user data to firestore
+      final userData = UserDataModel(
+          displayName: displayName,
+          phoneNumber: phoneNumber,
+          address: address,
+          city: city,
+          description: description,
+          photoURL: _imageURL);
+      if (downloadUrl != "") {
+        userData.photoURL = downloadUrl;
+      }
+      final database = Provider.of<FirestoreService>(context, listen: false);
+      await database.setUserData(userData);
+      if (imageFile != null) await imageFile.delete();
+    } catch (e) {
+      print(e);
+    }
   }
 }
 
@@ -149,41 +176,3 @@ Widget buildName(User user, UserDataModel userData) => Column(
         ),
       ],
     );
-
-Future<void> editUserData(
-    BuildContext context,
-    String displayName,
-    String phoneNumber,
-    String address,
-    String city,
-    String description,
-    String imageUrl,
-    File imageFile) async {
-  try {
-    String downloadUrl = "";
-    if (imageFile != null) {
-      //upload image to storage
-      final storage =
-          Provider.of<FirebaseStorageService>(context, listen: false);
-      downloadUrl = await storage.uploadProfilePicture(file: imageFile);
-    } else {
-      print("null");
-    }
-    //save user data to firestore
-    final userData = UserDataModel(
-        displayName: displayName,
-        phoneNumber: phoneNumber,
-        address: address,
-        city: city,
-        description: description,
-        photoURL: imageUrl);
-    if (downloadUrl != "") {
-      userData.photoURL = downloadUrl;
-    }
-    final database = Provider.of<FirestoreService>(context, listen: false);
-    await database.setUserData(userData);
-    if (imageFile != null) await imageFile.delete();
-  } catch (e) {
-    print(e);
-  }
-}

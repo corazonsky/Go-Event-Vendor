@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/components/service_card.dart';
 import 'package:go_event_vendor/models/Service.dart';
+import 'package:go_event_vendor/services/firestore_service.dart';
 import 'package:go_event_vendor/size_config.dart';
+import 'package:provider/provider.dart';
 
 class ServiceList extends StatelessWidget {
   const ServiceList({
@@ -10,21 +12,42 @@ class ServiceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    final database = Provider.of<FirestoreService>(context);
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Padding(
         padding: EdgeInsets.only(
           right: getProportionateScreenWidth(5),
         ),
-        child: GridView.count(
-          physics: ScrollPhysics(),
-          shrinkWrap: true,
-          crossAxisCount: 2,
-          childAspectRatio: 0.8,
-          children: List.generate(services.length, (index) {
-            return ServiceCard(service: services[index]);
-          }),
+        child: StreamBuilder(
+          stream: database.servicesStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Service> serviceList = snapshot.data;
+              return Container(
+                child: GridView.builder(
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: serviceList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.75,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.all(5),
+                      child: ServiceCard(service: serviceList[index]),
+                    );
+                  },
+                ),
+              );
+            } else if (snapshot.hasError) {
+              print(snapshot.error);
+              return Text("No data available");
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
         ),
       ),
     );

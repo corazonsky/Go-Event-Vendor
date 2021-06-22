@@ -12,7 +12,6 @@ class Body extends StatelessWidget {
     return MainBackground(
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               height: 30,

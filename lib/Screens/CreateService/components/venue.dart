@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:go_event_vendor/components/main_background.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
+import 'package:go_event_vendor/constant.dart';
 import 'package:go_event_vendor/models/Service.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
+import 'package:go_event_vendor/services/firebase_storage_service.dart';
 import 'package:go_event_vendor/services/firestore_service.dart';
+import 'package:go_event_vendor/services/image_picker_service.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class Venue extends StatefulWidget {
@@ -18,6 +22,7 @@ class Venue extends StatefulWidget {
 }
 
 class _VenueState extends State<Venue> {
+  final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
@@ -26,7 +31,8 @@ class _VenueState extends State<Venue> {
   final _maxOrderController = TextEditingController();
   final _areaController = TextEditingController();
   final _capacityController = TextEditingController();
-  File imageFile;
+  bool _status = true;
+  List<File> _imageList = [];
 
   @override
   void initState() {
@@ -54,71 +60,204 @@ class _VenueState extends State<Venue> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 25),
-            RoundedInputField(
-              hintText: "Service Name",
-              icon: Icons.room_service,
-              controller: _nameController,
-            ),
-            RoundedInputField(
-              hintText: "Description",
-              icon: Icons.description,
-              maxLines: 4,
-              controller: _descriptionController,
-            ),
-            RoundedInputField(
-              hintText: "Price",
-              icon: Icons.money,
-              suffixText: "IDR/hour",
-              controller: _priceController,
-              digitInput: true,
-            ),
-            RoundedInputField(
-              hintText: "Address",
-              icon: Icons.location_city,
-              controller: _addressController,
-            ),
-            RoundedInputField(
-              hintText: "Min Book Hour(s)",
-              icon: Icons.timer_off,
-              suffixText: "hour(s)",
-              controller: _minOrderController,
-              digitInput: true,
-            ),
-            RoundedInputField(
-              hintText: "Max Book Hour(s)",
-              icon: Icons.timer,
-              suffixText: "hour(s)",
-              controller: _maxOrderController,
-              digitInput: true,
-            ),
-            RoundedInputField(
-              hintText: "Area",
-              icon: Icons.home,
-              suffixText: "M\u00B2",
-              controller: _areaController,
-              digitInput: true,
-            ),
-            RoundedInputField(
-              hintText: "Capacity",
-              icon: Icons.person,
-              suffixText: "Pax",
-              controller: _capacityController,
-              digitInput: true,
+            Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  RoundedInputField(
+                    title: "Service Name",
+                    hintText: "Service Name",
+                    icon: Icons.room_service,
+                    controller: _nameController,
+                  ),
+                  RoundedInputField(
+                    title: "Description",
+                    hintText: "Description",
+                    icon: Icons.description,
+                    maxLines: 4,
+                    controller: _descriptionController,
+                  ),
+                  RoundedInputField(
+                    title: "Price (IDR)",
+                    hintText: "Price",
+                    icon: Icons.money,
+                    suffixText: "IDR/hour",
+                    controller: _priceController,
+                    digitInput: true,
+                  ),
+                  RoundedInputField(
+                    title: "Address",
+                    hintText: "Address",
+                    icon: Icons.location_city,
+                    controller: _addressController,
+                  ),
+                  RoundedInputField(
+                    title: "Min Order Hour(s)",
+                    hintText: "Min Order Hour(s)",
+                    icon: Icons.timer_off,
+                    suffixText: "hour(s)",
+                    controller: _minOrderController,
+                    digitInput: true,
+                  ),
+                  RoundedInputField(
+                    title: "Max Order Hour(s)",
+                    hintText: "Max Order Hour(s)",
+                    icon: Icons.timer,
+                    suffixText: "hour(s)",
+                    controller: _maxOrderController,
+                    digitInput: true,
+                  ),
+                  RoundedInputField(
+                    title: "Area(M\u00B2)",
+                    hintText: "Area",
+                    icon: Icons.home,
+                    suffixText: "M\u00B2",
+                    controller: _areaController,
+                    digitInput: true,
+                  ),
+                  RoundedInputField(
+                    title: "Capacity (pax)",
+                    hintText: "Capacity",
+                    icon: Icons.person,
+                    suffixText: "Pax",
+                    controller: _capacityController,
+                    digitInput: true,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "Status",
+                        style: TextStyle(color: kPrimaryColor, fontSize: 16),
+                      ),
+                      Row(
+                        children: [
+                          Switch(
+                            value: _status,
+                            onChanged: (value) {
+                              setState(() {
+                                _status = value;
+                              });
+                            },
+                            activeTrackColor: kPrimaryColor,
+                            activeColor: kPrimaryLightColor,
+                          ),
+                          Text(
+                            _status ? "Active" : "Inactive",
+                            style: TextStyle(
+                                color:
+                                    _status ? Colors.green : Colors.redAccent),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 12, bottom: 5),
+                          child: Text(
+                            "Image Gallery",
+                            style:
+                                TextStyle(color: kPrimaryColor, fontSize: 16),
+                          ),
+                        ),
+                        GridView.builder(
+                            physics: ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _imageList.length + 1,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3),
+                            itemBuilder: (context, index) {
+                              return index == 0
+                                  ? Container(
+                                      child: IconButton(
+                                        icon: Icon(Icons.add_a_photo),
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          chooseImage();
+                                        },
+                                      ),
+                                      decoration: BoxDecoration(
+                                          gradient: kPrimaryGradient),
+                                      margin: EdgeInsets.all(4),
+                                    )
+                                  : Stack(
+                                      fit: StackFit.expand,
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                          Container(
+                                            margin: EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: FileImage(
+                                                    _imageList[index - 1]),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            bottom: 0,
+                                            child: SizedBox(
+                                              height: 46,
+                                              width: 46,
+                                              child: TextButton(
+                                                style: ButtonStyle(
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      side: BorderSide(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                              Color>(
+                                                          Color(0xFFF5F6F9)),
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _imageList
+                                                        .removeAt(index - 1);
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: kPrimaryColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ]);
+                            }),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Processing Data')));
+                        }
+                      },
+                      child: Text("Test"))
+                ],
+              ),
             ),
             SizedBox(height: 25),
             RoundedButton(
               text: "Create Service",
               press: () async {
-                createService(
-                    context,
-                    "Venue",
-                    _nameController.text.trim(),
-                    _descriptionController.text.trim(),
-                    _priceController.text.trim(),
-                    _minOrderController.text.trim(),
-                    _maxOrderController.text.trim(),
-                    _areaController.text.trim(),
-                    _capacityController.text.trim());
+                createService();
               },
             ),
             SizedBox(height: 25),
@@ -127,47 +266,63 @@ class _VenueState extends State<Venue> {
       ),
     );
   }
-}
 
-Future<void> createService(
-    BuildContext context,
-    String serviceType,
-    String serviceName,
-    String description,
-    String price,
-    String minOrder,
-    String maxOrder,
-    String area,
-    String capacity) async {
-  try {
-    String vendorId = Provider.of<FirebaseAuthService>(context, listen: false)
-        .getCurrentUser()
-        .uid;
-    bool status = true;
-    int convertedPrice = int.parse(price);
-    int convertedMinOrder = int.parse(minOrder);
-    int convertedMaxOrder = int.parse(maxOrder);
-    int convertedCapacity = int.parse(capacity);
-    int convertedArea = int.parse(area);
-    String serviceId =
-        FirebaseFirestore.instance.collection('services').doc().id;
-    //save user data to firestore
-    final service = Service(
-      serviceId: serviceId,
-      vendorId: vendorId,
-      serviceType: serviceType,
-      serviceName: serviceName,
-      description: description,
-      price: convertedPrice,
-      minOrder: convertedMinOrder,
-      maxOrder: convertedMaxOrder,
-      area: convertedArea,
-      capacity: convertedCapacity,
-      status: status,
-    );
-    final database = Provider.of<FirestoreService>(context, listen: false);
-    await database.setService(service);
-  } catch (e) {
-    print(e);
+  chooseImage() async {
+    final imagePicker = Provider.of<ImagePickerService>(context, listen: false);
+    File imagePicked = await imagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (imagePicked != null) _imageList.add(imagePicked);
+    });
+  }
+
+  createService() async {
+    try {
+      String vendorId = Provider.of<FirebaseAuthService>(context, listen: false)
+          .getCurrentUser()
+          .uid;
+
+      String serviceId =
+          FirebaseFirestore.instance.collection('services').doc().id;
+      String serviceType = "Venue";
+      String serviceName = _nameController.text.trim();
+      String description = _descriptionController.text.trim();
+      int price = int.parse(_priceController.text.trim());
+      int minOrder = int.parse(_minOrderController.text.trim());
+      int maxOrder = int.parse(_maxOrderController.text.trim());
+      int capacity = int.parse(_capacityController.text.trim());
+      int area = int.parse(_areaController.text.trim());
+      bool status = _status;
+      List serviceImages = [];
+
+      if (_imageList != null) {
+        //upload image to storage
+        final storage =
+            Provider.of<FirebaseStorageService>(context, listen: false);
+        serviceImages = await storage.uploadServiceImages(
+            serviceId: serviceId, fileList: _imageList);
+      } else {
+        print("null");
+      }
+
+      //save service data to firestore
+      final service = Service(
+        serviceId: serviceId,
+        vendorId: vendorId,
+        serviceType: serviceType,
+        serviceName: serviceName,
+        description: description,
+        price: price,
+        minOrder: minOrder,
+        maxOrder: maxOrder,
+        area: area,
+        capacity: capacity,
+        status: status,
+        images: serviceImages,
+      );
+      final database = Provider.of<FirestoreService>(context, listen: false);
+      await database.setService(service);
+    } catch (e) {
+      print(e);
+    }
   }
 }

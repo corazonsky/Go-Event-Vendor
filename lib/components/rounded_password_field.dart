@@ -20,7 +20,7 @@ class RoundedPasswordField extends StatelessWidget {
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
           hintText: "Password",
-          icon: Icon(
+          prefixIcon: Icon(
             Icons.lock,
             color: kPrimaryColor,
           ),
@@ -28,7 +28,31 @@ class RoundedPasswordField extends StatelessWidget {
             Icons.visibility,
             color: kPrimaryColor,
           ),
-          border: InputBorder.none,
+          fillColor: kPrimaryLightColor,
+          filled: true,
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25.0),
+              borderSide: BorderSide(
+                color: kPrimaryLightColor,
+              )),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.0),
+            borderSide: BorderSide(
+              color: kPrimaryColor,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.0),
+            borderSide: BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.0),
+            borderSide: BorderSide(
+              color: kPrimaryColor,
+            ),
+          ),
         ),
       ),
       width: width,
