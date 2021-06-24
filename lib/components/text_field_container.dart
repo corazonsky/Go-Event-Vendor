@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_event_vendor/constant.dart';
 
 import '../size_config.dart';
 

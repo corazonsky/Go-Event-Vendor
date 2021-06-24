@@ -2,49 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:go_event_vendor/Screens/ServiceDetails/components/venue_details.dart';
 import 'package:go_event_vendor/components/custom_app_bar.dart';
 import 'package:go_event_vendor/components/custom_bottom_navbar.dart';
+import 'package:go_event_vendor/components/loading_snackbar.dart';
 import 'package:go_event_vendor/constant.dart';
 import 'package:go_event_vendor/models/Service.dart';
+import 'package:go_event_vendor/routes.dart';
+import 'package:go_event_vendor/services/firebase_storage_service.dart';
 import 'package:go_event_vendor/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 
 class ServiceDetailsScreen extends StatelessWidget {
-  //final String serviceId;
-
   const ServiceDetailsScreen({Key key});
   @override
   Widget build(BuildContext context) {
-    final Map service = ModalRoute.of(context).settings.arguments;
-    final database = Provider.of<FirestoreService>(context);
+    final Map serviceMap = ModalRoute.of(context).settings.arguments;
+    Service service = serviceMap['service'];
     return Scaffold(
       appBar: CustomAppBar(title: Text("Service Details"), backButton: true),
-      body: StreamBuilder<Service>(
-        stream: database.serviceStream(serviceId: service['serviceId']),
-        builder: (context, snapshot) {
-          Service service;
-          if (snapshot.hasData) {
-            service = snapshot.data;
-            return VenueDetails(
+      body: service.serviceType == "Venue"
+          ? VenueDetails(
               service: service,
-            );
-          } else if (snapshot.hasError) {
-            return Text("No data available");
-          } else {
-            return CircularProgressIndicator();
-          }
-        },
-      ),
+            )
+          : service.serviceType == "Talent"
+              ? VenueDetails()
+              : VenueDetails(),
       bottomNavigationBar: CustomBottomNavigationBar(),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: () {},
+            heroTag: "delete",
+            onPressed: () {
+              loadingSnackBar(context, "Deleting Service...");
+              deleteService(context, service)
+                  .whenComplete(() => Navigator.of(context).pop());
+            },
             child: Icon(Icons.delete),
             backgroundColor: Colors.red,
           ),
           SizedBox(height: 20),
           FloatingActionButton(
-            onPressed: () {},
+            heroTag: "gallery",
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.service_gallery,
+                  arguments: {'serviceId': service.serviceId});
+            },
             child: Icon(Icons.add_a_photo),
             backgroundColor: kPrimaryColor,
           ),
@@ -52,4 +53,15 @@ class ServiceDetailsScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Future deleteService(BuildContext context, Service service) async {
+  final storage = Provider.of<FirebaseStorageService>(context, listen: false);
+  final database = Provider.of<FirestoreService>(context, listen: false);
+  if (service.images != null) {
+    for (var image in service.images) {
+      await storage.deleteImage(imageURL: image);
+    }
+  }
+  await database.deleteService(service);
 }

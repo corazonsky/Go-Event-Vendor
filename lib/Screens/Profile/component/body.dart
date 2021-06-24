@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_event_vendor/components/display_name.dart';
 import 'package:go_event_vendor/components/main_background.dart';
 import 'package:go_event_vendor/components/profile_pic.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
@@ -76,7 +76,8 @@ class _BodyState extends State<Body> {
                 setState(() {});
               },
             ),
-            buildName(user, widget.userData),
+            displayName(widget.userData.displayName, user.email,
+                widget.userData.phoneNumber),
             SizedBox(height: 25),
             RoundedInputField(
               title: "Display Name",
@@ -157,27 +158,3 @@ class _BodyState extends State<Body> {
     }
   }
 }
-
-Widget buildName(User user, UserDataModel userData) => Column(
-      //ini harusnya di tambahin User user di params nya
-      children: [
-        Text(
-          userData.displayName,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        Text(
-          user.email,
-          style: TextStyle(color: Colors.grey),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        Text(
-          userData.phoneNumber,
-          style: TextStyle(color: Colors.grey),
-        ),
-      ],
-    );

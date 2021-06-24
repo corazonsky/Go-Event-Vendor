@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_event_vendor/Screens/ServiceDetails/service_details.dart';
 import 'package:go_event_vendor/models/Service.dart';
 import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/size_config.dart';
@@ -24,7 +23,7 @@ class ServiceCard extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, Routes.service_details,
-                arguments: {'serviceId': service.serviceId});
+                arguments: {'service': service});
           },
           child: Column(
             children: [
@@ -34,13 +33,15 @@ class ServiceCard extends StatelessWidget {
                   aspectRatio: 1.1,
                   child: Container(
                     decoration: BoxDecoration(color: kPrimaryLightColor),
-                    child: Hero(
-                      tag: service.serviceId,
-                      child: Image.network(
-                        service.images[0],
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                    child: service.images.isEmpty
+                        ? Container()
+                        : Hero(
+                            tag: service.serviceId,
+                            child: Image.network(
+                              service.images[0],
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                   ),
                 ),
               ),

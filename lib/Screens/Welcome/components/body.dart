@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_event_vendor/Screens/Login/login_screen.dart';
-import 'package:go_event_vendor/Screens/Signup/signup_screen.dart';
 import 'package:go_event_vendor/Screens/Welcome/components/background.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/constant.dart';

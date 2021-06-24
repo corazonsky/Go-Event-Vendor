@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_event_vendor/components/main_background.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/constant.dart';
 import 'package:go_event_vendor/models/Service.dart';
-import 'package:go_event_vendor/services/auth_service.dart';
 import 'package:go_event_vendor/services/firestore_service.dart';
 import 'package:go_event_vendor/size_config.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +48,7 @@ class _VenueDetailsState extends State<VenueDetails> {
     _maxOrderController.dispose();
     _areaController.dispose();
     _capacityController.dispose();
-    // super.dispose();
+    super.dispose();
   }
 
   @override
@@ -64,7 +62,9 @@ class _VenueDetailsState extends State<VenueDetails> {
               width: getProportionateScreenWidth(SizeConfig.screenWidth),
               height:
                   getProportionateScreenHeight(0.25 * SizeConfig.screenHeight),
-              child: Image.network(service.images[0], fit: BoxFit.fill),
+              child: service.images.isEmpty
+                  ? Container()
+                  : Image.network(service.images[0], fit: BoxFit.fill),
             ),
             Padding(
               padding: EdgeInsets.all(10),

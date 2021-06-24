@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_event_vendor/components/loading_snackbar.dart';
 import 'package:go_event_vendor/components/main_background.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
+import 'package:go_event_vendor/components/switch_input.dart';
 import 'package:go_event_vendor/constant.dart';
 import 'package:go_event_vendor/models/Service.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
@@ -33,6 +35,7 @@ class _VenueState extends State<Venue> {
   final _capacityController = TextEditingController();
   bool _status = true;
   List<File> _imageList = [];
+  bool _uploading = false;
 
   @override
   void initState() {
@@ -57,13 +60,13 @@ class _VenueState extends State<Venue> {
     return MainBackground(
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 25),
             Form(
               key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(height: 25),
                   RoundedInputField(
                     title: "Service Name",
                     hintText: "Service Name",
@@ -123,34 +126,16 @@ class _VenueState extends State<Venue> {
                     controller: _capacityController,
                     digitInput: true,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        "Status",
-                        style: TextStyle(color: kPrimaryColor, fontSize: 16),
-                      ),
-                      Row(
-                        children: [
-                          Switch(
-                            value: _status,
-                            onChanged: (value) {
-                              setState(() {
-                                _status = value;
-                              });
-                            },
-                            activeTrackColor: kPrimaryColor,
-                            activeColor: kPrimaryLightColor,
-                          ),
-                          Text(
-                            _status ? "Active" : "Inactive",
-                            style: TextStyle(
-                                color:
-                                    _status ? Colors.green : Colors.redAccent),
-                          ),
-                        ],
-                      )
-                    ],
+                  SwitchInput(
+                    status: _status,
+                    title: "Status",
+                    trueValue: "Active",
+                    falseValue: "Inactive",
+                    onChanged: (value) {
+                      setState(() {
+                        _status = value;
+                      });
+                    },
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
@@ -179,7 +164,7 @@ class _VenueState extends State<Venue> {
                                         icon: Icon(Icons.add_a_photo),
                                         color: Colors.white,
                                         onPressed: () {
-                                          chooseImage();
+                                          if (!_uploading) chooseImage();
                                         },
                                       ),
                                       decoration: BoxDecoration(
@@ -242,25 +227,27 @@ class _VenueState extends State<Venue> {
                       ],
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Processing Data')));
+                  SizedBox(height: 25),
+                  RoundedButton(
+                    text: "Create Service",
+                    press: () {
+                      if (_formKey.currentState.validate()) {
+                        if (!_uploading) {
+                          loadingSnackBar(context, "Creating Service");
+                          createService()
+                              .whenComplete(() => Navigator.of(context).pop());
+                          setState(() {
+                            print(_uploading);
+                            _uploading = true;
+                          });
                         }
-                      },
-                      child: Text("Test"))
+                      }
+                    },
+                  ),
+                  SizedBox(height: 25),
                 ],
               ),
             ),
-            SizedBox(height: 25),
-            RoundedButton(
-              text: "Create Service",
-              press: () async {
-                createService();
-              },
-            ),
-            SizedBox(height: 25),
           ],
         ),
       ),
@@ -275,7 +262,7 @@ class _VenueState extends State<Venue> {
     });
   }
 
-  createService() async {
+  Future createService() async {
     try {
       String vendorId = Provider.of<FirebaseAuthService>(context, listen: false)
           .getCurrentUser()

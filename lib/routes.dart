@@ -4,6 +4,7 @@ import 'package:go_event_vendor/Screens/Home/home_screen.dart';
 import 'package:go_event_vendor/Screens/Login/login_screen.dart';
 import 'package:go_event_vendor/Screens/Profile/profile_screen.dart';
 import 'package:go_event_vendor/Screens/Service/service_screen.dart';
+import 'package:go_event_vendor/Screens/ServiceDetails/components/service_gallery.dart';
 import 'package:go_event_vendor/Screens/ServiceDetails/service_details.dart';
 import 'package:go_event_vendor/Screens/Signup/signup_screen.dart';
 import 'package:go_event_vendor/Screens/Welcome/welcome_screen.dart';
@@ -17,6 +18,7 @@ class Routes {
   static const String home = '/home';
   static const String service = '/service';
   static const String service_details = '/service_details';
+  static const String service_gallery = '/service_details/gallery';
   static const String create_service = '/service/create';
   static const String profile = '/profile';
 
@@ -28,6 +30,7 @@ class Routes {
     service: (BuildContext context) => ServiceScreen(),
     create_service: (BuildContext context) => CreateServiceScreen(),
     service_details: (BuildContext context) => ServiceDetailsScreen(),
+    service_gallery: (BuildContext context) => ServiceGallery(),
     profile: (BuildContext context) => ProfileScreen(),
   };
 }
