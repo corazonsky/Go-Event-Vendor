@@ -80,12 +80,15 @@ class AuthWidgetBuilder extends StatelessWidget {
         if (user != null) {
           return MultiProvider(
             providers: [
-              Provider<UserModel>.value(value: user),
               Provider<FirestoreService>(
                 create: (_) => FirestoreService(uid: user.uid),
               ),
               Provider<FirebaseStorageService>(
                 create: (_) => FirebaseStorageService(uid: user.uid),
+              ),
+              StreamProvider<UserModel>.value(
+                value: FirestoreService(uid: user.uid).userDataStream(),
+                initialData: UserModel(),
               ),
             ],
             child: builder(context, snapshot),

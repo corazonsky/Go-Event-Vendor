@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_event_vendor/components/dropdown_input_field.dart';
 import 'package:go_event_vendor/components/loading_snackbar.dart';
 import 'package:go_event_vendor/components/main_background.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
@@ -9,6 +10,7 @@ import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/switch_input.dart';
 import 'package:go_event_vendor/constant.dart';
 import 'package:go_event_vendor/models/Service.dart';
+import 'package:go_event_vendor/models/ServiceType.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
 import 'package:go_event_vendor/services/firebase_storage_service.dart';
 import 'package:go_event_vendor/services/firestore_service.dart';
@@ -16,17 +18,19 @@ import 'package:go_event_vendor/services/image_picker_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class Venue extends StatefulWidget {
-  const Venue({Key key}) : super(key: key);
+class Body extends StatefulWidget {
+  final ServiceType serviceType;
+  const Body({Key key, this.serviceType}) : super(key: key);
 
   @override
-  _VenueState createState() => _VenueState();
+  _BodyState createState() => _BodyState();
 }
 
-class _VenueState extends State<Venue> {
+class _BodyState extends State<Body> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _categoryController = TextEditingController();
   final _priceController = TextEditingController();
   final _addressController = TextEditingController();
   final _minOrderController = TextEditingController();
@@ -57,6 +61,7 @@ class _VenueState extends State<Venue> {
 
   @override
   Widget build(BuildContext context) {
+    final ServiceType _type = widget.serviceType;
     return MainBackground(
       child: SingleChildScrollView(
         child: Column(
@@ -68,7 +73,7 @@ class _VenueState extends State<Venue> {
                 children: <Widget>[
                   SizedBox(height: 25),
                   RoundedInputField(
-                    title: "Service Name",
+                    title: _type.name + " Name",
                     hintText: "Service Name",
                     icon: Icons.room_service,
                     controller: _nameController,
@@ -80,52 +85,60 @@ class _VenueState extends State<Venue> {
                     maxLines: 4,
                     controller: _descriptionController,
                   ),
+                  DropDownInputField(
+                    icon: Icons.star,
+                    title: _type.name + " Type",
+                    valueList: _type.category,
+                    controller: _categoryController,
+                    onChanged: (newValue) {
+                      setState(() => _categoryController.text = newValue);
+                    },
+                  ),
                   RoundedInputField(
                     title: "Price (IDR)",
                     hintText: "Price",
                     icon: Icons.money,
-                    suffixText: "IDR/hour",
+                    suffixText: "IDR/" + _type.unit,
                     controller: _priceController,
                     digitInput: true,
                   ),
                   RoundedInputField(
-                    title: "Address",
-                    hintText: "Address",
-                    icon: Icons.location_city,
-                    controller: _addressController,
-                  ),
-                  RoundedInputField(
-                    title: "Min Order Hour(s)",
-                    hintText: "Min Order Hour(s)",
-                    icon: Icons.timer_off,
-                    suffixText: "hour(s)",
+                    title: "Min " + _type.unit + " Order",
+                    hintText: "Min Order",
+                    icon: Icons.alarm_off,
+                    suffixText: _type.unit,
                     controller: _minOrderController,
                     digitInput: true,
                   ),
                   RoundedInputField(
-                    title: "Max Order Hour(s)",
-                    hintText: "Max Order Hour(s)",
-                    icon: Icons.timer,
-                    suffixText: "hour(s)",
+                    title: "Max " + _type.unit + " Order",
+                    hintText: "Max Order",
+                    icon: Icons.alarm_add,
+                    suffixText: _type.unit,
                     controller: _maxOrderController,
                     digitInput: true,
                   ),
-                  RoundedInputField(
-                    title: "Area(M\u00B2)",
-                    hintText: "Area",
-                    icon: Icons.home,
-                    suffixText: "M\u00B2",
-                    controller: _areaController,
-                    digitInput: true,
-                  ),
-                  RoundedInputField(
-                    title: "Capacity (pax)",
-                    hintText: "Capacity",
-                    icon: Icons.person,
-                    suffixText: "Pax",
-                    controller: _capacityController,
-                    digitInput: true,
-                  ),
+                  if (_type.name == "Venue")
+                    Column(
+                      children: [
+                        RoundedInputField(
+                          title: "Area(M\u00B2)",
+                          hintText: "Area",
+                          icon: Icons.home,
+                          suffixText: "M\u00B2",
+                          controller: _areaController,
+                          digitInput: true,
+                        ),
+                        RoundedInputField(
+                          title: "Capacity (pax)",
+                          hintText: "Capacity",
+                          icon: Icons.person,
+                          suffixText: "Pax",
+                          controller: _capacityController,
+                          digitInput: true,
+                        ),
+                      ],
+                    ),
                   SwitchInput(
                     status: _status,
                     title: "Status",
@@ -270,16 +283,22 @@ class _VenueState extends State<Venue> {
 
       String serviceId =
           FirebaseFirestore.instance.collection('services').doc().id;
-      String serviceType = "Venue";
+      String serviceType = widget.serviceType.name;
       String serviceName = _nameController.text.trim();
       String description = _descriptionController.text.trim();
-      int price = int.parse(_priceController.text.trim());
+      String category = _categoryController.text.trim();
+      double price = double.parse(_priceController.text.trim());
       int minOrder = int.parse(_minOrderController.text.trim());
       int maxOrder = int.parse(_maxOrderController.text.trim());
-      int capacity = int.parse(_capacityController.text.trim());
-      int area = int.parse(_areaController.text.trim());
+      int capacity = _capacityController.text == ""
+          ? null
+          : int.parse(_capacityController.text.trim());
+      int area = _areaController.text == ""
+          ? null
+          : int.parse(_areaController.text.trim());
       bool status = _status;
       List serviceImages = [];
+      //List searchIndex = [];
 
       if (_imageList != null) {
         //upload image to storage
@@ -298,6 +317,7 @@ class _VenueState extends State<Venue> {
         serviceType: serviceType,
         serviceName: serviceName,
         description: description,
+        category: category,
         price: price,
         minOrder: minOrder,
         maxOrder: maxOrder,
@@ -305,6 +325,7 @@ class _VenueState extends State<Venue> {
         capacity: capacity,
         status: status,
         images: serviceImages,
+        //searchIndex: searchIndex
       );
       final database = Provider.of<FirestoreService>(context, listen: false);
       await database.setService(service);

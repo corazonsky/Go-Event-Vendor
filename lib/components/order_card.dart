@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_event_vendor/models/Order.dart';
+import 'package:go_event_vendor/models/Transaction.dart';
 import '../constant.dart';
 import '../size_config.dart';
 
@@ -12,7 +12,7 @@ class OrderCard extends StatelessWidget {
   }) : super(key: key);
 
   final double width, aspectRetio;
-  final Order order;
+  final Transaction order;
 
   @override
   Widget build(BuildContext context) {
@@ -43,54 +43,54 @@ class OrderCard extends StatelessWidget {
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  order.eventName,
-                                  style: TextStyle(
-                                    color: kPrimaryColor,
-                                    fontSize: getProportionateScreenWidth(16),
-                                  ),
-                                  maxLines: 2,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: getProportionateScreenHeight(5)),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.person,
-                                          size:
-                                              getProportionateScreenWidth(10)),
-                                      Text(
-                                        order.customerName,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize:
-                                              getProportionateScreenWidth(10),
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: getProportionateScreenHeight(5)),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.calendar_today,
-                                          size:
-                                              getProportionateScreenWidth(10)),
-                                      Text(
-                                        order.date,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize:
-                                              getProportionateScreenWidth(10),
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // Text(
+                                //   order.eventName,
+                                //   style: TextStyle(
+                                //     color: kPrimaryColor,
+                                //     fontSize: getProportionateScreenWidth(16),
+                                //   ),
+                                //   maxLines: 2,
+                                // ),
+                                // Padding(
+                                //   padding: EdgeInsets.only(
+                                //       top: getProportionateScreenHeight(5)),
+                                //   child: Row(
+                                //     children: [
+                                //       Icon(Icons.person,
+                                //           size:
+                                //               getProportionateScreenWidth(10)),
+                                //       Text(
+                                //         order.customerName,
+                                //         textAlign: TextAlign.center,
+                                //         style: TextStyle(
+                                //           fontSize:
+                                //               getProportionateScreenWidth(10),
+                                //           color: Colors.black,
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                                // Padding(
+                                //   padding: EdgeInsets.only(
+                                //       top: getProportionateScreenHeight(5)),
+                                //   child: Row(
+                                //     children: [
+                                //       Icon(Icons.calendar_today,
+                                //           size:
+                                //               getProportionateScreenWidth(10)),
+                                //       Text(
+                                //         order.date,
+                                //         textAlign: TextAlign.center,
+                                //         style: TextStyle(
+                                //           fontSize:
+                                //               getProportionateScreenWidth(10),
+                                //           color: Colors.black,
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                               ]),
                         )),
                   ),

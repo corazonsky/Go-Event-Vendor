@@ -3,30 +3,30 @@ import 'package:flutter/services.dart';
 import 'package:go_event_vendor/components/text_field_container.dart';
 import 'package:go_event_vendor/constant.dart';
 
-class RoundedInputField extends StatelessWidget {
+class DropDownInputField extends StatelessWidget {
   final String title;
+  final dynamic value;
+  final List<dynamic> valueList;
   final String hintText;
   final String prefixText;
   final String suffixText;
   final IconData icon;
-  final int maxLines;
   final double width;
-  final bool digitInput;
   final TextEditingController controller;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<dynamic> onChanged;
 
-  const RoundedInputField(
+  const DropDownInputField(
       {Key key,
       this.title,
+      this.value,
       this.hintText,
       this.prefixText,
       this.suffixText,
       this.icon,
-      this.maxLines = 1,
       this.controller,
-      this.digitInput = false,
       this.width = 270,
-      this.onChanged})
+      this.onChanged,
+      this.valueList})
       : super(key: key);
 
   @override
@@ -35,21 +35,21 @@ class RoundedInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFieldContainer(
-          child: TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: maxLines,
-            controller: controller,
-            cursorColor: kPrimaryColor,
-            keyboardType: digitInput ? TextInputType.number : null,
-            inputFormatters:
-                digitInput ? [FilteringTextInputFormatter.digitsOnly] : null,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
+          child: DropdownButtonFormField(
+            items: valueList.map((dynamic category) {
+              return new DropdownMenuItem(
+                  value: category,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text(category),
+                      ),
+                    ],
+                  ));
+            }).toList(),
             onChanged: onChanged,
+            value: value,
             decoration: InputDecoration(
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -66,12 +66,6 @@ class RoundedInputField extends StatelessWidget {
                   borderSide: BorderSide(
                     color: kPrimaryLightColor,
                   )),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25.0),
-                borderSide: BorderSide(
-                  color: kPrimaryColor,
-                ),
-              ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25.0),
                 borderSide: BorderSide(
@@ -88,7 +82,6 @@ class RoundedInputField extends StatelessWidget {
               suffixStyle: TextStyle(color: kPrimaryColor),
               suffixText: suffixText,
               labelText: title,
-              hintText: hintText,
             ),
           ),
           width: width,

@@ -7,7 +7,7 @@ import 'package:go_event_vendor/components/profile_pic.dart';
 import 'package:go_event_vendor/components/rounded_button.dart';
 import 'package:go_event_vendor/components/rounded_input_field.dart';
 import 'package:go_event_vendor/components/rounded_password_field.dart';
-import 'package:go_event_vendor/models/UserData.dart';
+import 'package:go_event_vendor/models/User.dart';
 import 'package:go_event_vendor/routes.dart';
 import 'package:go_event_vendor/services/auth_service.dart';
 import 'package:go_event_vendor/services/firebase_storage_service.dart';
@@ -151,8 +151,9 @@ Future<void> signUp(
       downloadUrl = await storage.uploadProfilePicture(file: imageFile);
     }
     //save user data to firestore
-    final userData = UserDataModel(
+    final userData = UserModel(
         uid: registeredUser.uid,
+        email: email,
         displayName: displayName,
         phoneNumber: phoneNumber,
         address: address,

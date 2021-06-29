@@ -223,7 +223,7 @@ class _VenueDetailsState extends State<VenueDetails> {
       String serviceId = widget.service.serviceId;
       String serviceName = _nameController.text.trim();
       String description = _descriptionController.text.trim();
-      int price = int.parse(_priceController.text.trim());
+      double price = double.parse(_priceController.text.trim());
       int minOrder = int.parse(_minOrderController.text.trim());
       int maxOrder = int.parse(_maxOrderController.text.trim());
       int capacity = int.parse(_capacityController.text.trim());

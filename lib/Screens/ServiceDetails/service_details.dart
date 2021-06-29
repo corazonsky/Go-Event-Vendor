@@ -17,14 +17,14 @@ class ServiceDetailsScreen extends StatelessWidget {
     final Map serviceMap = ModalRoute.of(context).settings.arguments;
     Service service = serviceMap['service'];
     return Scaffold(
-      appBar: CustomAppBar(title: Text("Service Details"), backButton: true),
+      appBar: CustomAppBar(title: "Service Details", backButton: true),
       body: service.serviceType == "Venue"
           ? VenueDetails(
               service: service,
             )
           : service.serviceType == "Talent"
-              ? VenueDetails()
-              : VenueDetails(),
+              ? VenueDetails(service: service)
+              : VenueDetails(service: service),
       bottomNavigationBar: CustomBottomNavigationBar(),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,

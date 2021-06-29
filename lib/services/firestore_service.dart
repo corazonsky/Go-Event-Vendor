@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_event_vendor/models/Service.dart';
-import 'package:go_event_vendor/models/UserData.dart';
+import 'package:go_event_vendor/models/ServiceType.dart';
+import 'package:go_event_vendor/models/User.dart';
 
 import 'firestore_path.dart';
 
@@ -11,19 +12,18 @@ class FirestoreService {
   final String uid;
 
   // Create / Update UserData
-  Future<void> setUserData(UserDataModel userData) async {
+  Future<void> setUserData(UserModel userData) async {
     final path = FirestorePath.userData(uid);
     final reference = FirebaseFirestore.instance.doc(path);
     await reference.set(userData.toMap(), SetOptions(merge: true));
   }
 
   // Reads the current userData
-  Stream<UserDataModel> userDataStream() {
+  Stream<UserModel> userDataStream() {
     final path = FirestorePath.userData(uid);
     final reference = FirebaseFirestore.instance.doc(path);
     final snapshots = reference.snapshots();
-    return snapshots
-        .map((snapshot) => UserDataModel.fromMap(snapshot.data(), uid));
+    return snapshots.map((snapshot) => UserModel.fromMap(snapshot.data(), uid));
   }
 
   // Create / Update Service
@@ -41,16 +41,28 @@ class FirestoreService {
   }
 
   //Method to retrieve all services item from the same user based on uid
-  Stream<List<Service>> servicesStream() {
+  Stream<List<Service>> servicesStream({
+    Query queryBuilder(Query query),
+    int sort(Service lhs, Service rhs),
+  }) {
     final path = FirestorePath.services();
-    final reference = FirebaseFirestore.instance
+    Query query = FirebaseFirestore.instance
         .collection(path)
         .where("vendorId", isEqualTo: uid);
-    final snapshots = reference.snapshots();
+
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+
+    final Stream<QuerySnapshot> snapshots = query.snapshots();
     return snapshots.map((snapshot) {
       final result = snapshot.docs
           .map((snapshot) => Service.fromMap(snapshot.data(), snapshot.id))
+          .where((value) => value != null)
           .toList();
+      if (sort != null) {
+        result.sort(sort);
+      }
       return result;
     });
   }
@@ -62,5 +74,26 @@ class FirestoreService {
     final snapshots = reference.snapshots();
     return snapshots
         .map((snapshot) => Service.fromMap(snapshot.data(), serviceId));
+  }
+
+  // Reads the current service type
+  Stream<List<ServiceType>> serviceTypesStream({
+    Query queryBuilder(Query query),
+  }) {
+    final path = FirestorePath.serviceTypes();
+    Query query = FirebaseFirestore.instance.collection(path);
+
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+
+    final Stream<QuerySnapshot> snapshots = query.snapshots();
+    return snapshots.map((snapshot) {
+      final result = snapshot.docs
+          .map((snapshot) => ServiceType.fromMap(snapshot.data()))
+          .where((value) => value != null)
+          .toList();
+      return result;
+    });
   }
 }

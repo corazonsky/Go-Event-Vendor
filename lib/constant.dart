@@ -7,3 +7,10 @@ const kPrimaryGradient = LinearGradient(
   end: Alignment.bottomLeft,
   colors: [Colors.blueGrey, kPrimaryColor],
 );
+
+Map<String, IconData> iconMapping = {
+  'Venue': Icons.location_city,
+  'Talent': Icons.music_note,
+  'Catering': Icons.fastfood,
+  '': Icons.person
+};
